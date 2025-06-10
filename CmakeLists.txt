@@ -11,44 +11,44 @@ find_package(Threads REQUIRED)
 # Include directories
 include_directories(${Boost_INCLUDE_DIRS})
 
-# Create server library
-add_library(WebsocketServer
+# Build Server executable
+add_executable(Server
+    Server.cpp
     WebsocketServer.cpp
+    WebsocketServer.h
+    Message.h
+    Message.cpp
 )
 
-target_link_libraries(WebsocketServer
+target_link_libraries(Server
     ${Boost_LIBRARIES}
     Threads::Threads
 )
 
-# Create client library
-add_library(WebsocketClient
+# Build Client executable
+add_executable(Client
+    Client.cpp
     WebsocketClient.cpp
+    WebsocketClient.h
+    Message.h
+    Message.cpp
 )
 
-target_link_libraries(WebsocketClient
-    ${Boost_LIBRARIES}
-    Threads::Threads
-)
-
-# Create example executable
-add_executable(WebsocketTest
-    WebsocketTest.cpp
-)
-
-target_link_libraries(WebsocketTest
-    WebsocketServer
-    WebsocketClient
+target_link_libraries(Client
     ${Boost_LIBRARIES}
     Threads::Threads
 )
 
 # Compiler-specific options
 if(MSVC)
-    target_compile_definitions(WebsocketTest PRIVATE _WIN32_WINNT=0x0601)
+    target_compile_definitions(Server PRIVATE _WIN32_WINNT=0x0601)
+    target_compile_definitions(Client PRIVATE _WIN32_WINNT=0x0601)
 endif()
 
 # Set output directory
-set_target_properties(WebsocketTest PROPERTIES
+set_target_properties(Server PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+)
+set_target_properties(Client PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
 )
