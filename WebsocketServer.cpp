@@ -4,42 +4,42 @@ using namespace boost;
 using tcp = asio::ip::tcp;
 namespace websocket = beast::websocket;
 
+// Constructor
 WebSocketServer::WebSocketServer(unsigned short port)
-    : acceptor_(ioc_, tcp::endpoint(tcp::v4(), port)) {}
+    : acceptor(ioc, tcp::endpoint(tcp::v4(), port)) {}
 
-void WebSocketServer::run() {
-    accept_connections();
-    ioc_.run();
+
+// Run the WebSocket server
+void WebSocketServer::run(const Message& msg) {
+    accept_connections(msg);
+    ioc.run();
 }
 
-void WebSocketServer::accept_connections() {
-    for (;;) {
-        tcp::socket socket(ioc_);
-        acceptor_.accept(socket);
-        std::thread(&WebSocketServer::handle_session, this, std::move(socket)).detach();
+// Accept client WebSocket connections, passing the Message to each session
+void WebSocketServer::accept_connections(const Message& msg) {
+    while(true) {
+        tcp::socket socket(ioc);
+        acceptor.accept(socket);
+        std::thread(&WebSocketServer::handle_session, this, std::move(socket), msg).detach();
     }
 }
 
-void WebSocketServer::handle_session(tcp::socket socket) {
+// Handle a single WebSocket session with a connected client
+void WebSocketServer::handle_session(tcp::socket socket, const Message& msg) {
     try {
+        // Create a WebSocket stream from the socket and accept the connection
         websocket::stream<tcp::socket> ws(std::move(socket));
-        ws.accept();
+        ws.accept(); 
 
-        for (;;) {
-            beast::flat_buffer buffer;
-            ws.read(buffer);
+        while(true) {
+            // Serialize Message object to a string
+            std::string serializedMsg = msg.serialize();
 
-            // exanoke nessage
-            Message msg(1, Generic{}); 
-            std::ostringstream oss;
-            msg.printMessage(); 
-
-            std::string messageToSend = "Server: Message received and processed.";
-
-            ws.text(true);
-            ws.write(asio::buffer(messageToSend));
+            // Set the message type to text and send the serialized message to the client
+            ws.text(true); 
+            ws.write(asio::buffer(serializedMsg));
         }
     } catch (const std::exception& e) {
-        std::cerr << "Session error: " << e.what() << "\n";
+        std::cerr << "Session disconnect: " << e.what() << "\n";
     }
 }

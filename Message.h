@@ -8,6 +8,7 @@
 #include <stdint.h>
 #include <variant>
 #include <vector>
+#include <sstream>
 
 // Commented out section below allows multiple message types (structs) while
 // letting Message have the same format
@@ -57,6 +58,23 @@ public:
     void printMessage() const;
 
     MessageFormat getFormat() const;
+
+    /** Serializes the Message object to a string
+     *
+     * @return
+     *  std::string - The serialized message
+     */
+    std::string serialize() const;
+
+    /** Deserializes a string to a Message object
+     *
+     * @param
+     *  data: const std::string& - The serialized message string
+     *
+     * @return
+     *  Message - The deserialized Message object
+     */
+    static Message deserialize(const std::string& data);
 
 private:
     bool m_isHighPriority;    // Priority of message
