@@ -5,6 +5,8 @@
 #include <iostream>
 #include "Message.h" 
 #include <sstream>   
+#include "MessageQueue.h"
+#include <chrono>
 
 
 class WebSocketServer {
@@ -24,7 +26,7 @@ public:
      * @return
      *  none
      */
-    void run(const Message& msg);
+    void run(MessageQueue& queue);
 
 private:
     /** Accepts client WebSocket connections
@@ -35,7 +37,7 @@ private:
      * @return
      *  none
      */
-    void accept_connections(const Message& msg);
+    void accept_connections(MessageQueue& queue);
 
     /** Handles a single WebSocket session with a connected client
      *
@@ -46,7 +48,7 @@ private:
      * @return
      *  none
      */
-    void handle_session(boost::asio::ip::tcp::socket socket, const Message& msg);
+    void handle_session(boost::asio::ip::tcp::socket socket, MessageQueue& queue);
 
     boost::asio::io_context ioc;   // Boost ASIO IO context
     boost::asio::ip::tcp::acceptor acceptor;   // TCP acceptor for incoming connections

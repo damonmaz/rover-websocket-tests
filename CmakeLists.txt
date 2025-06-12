@@ -18,6 +18,8 @@ add_executable(Server
     WebsocketServer.h
     Message.h
     Message.cpp
+    MessageQueue.h
+    MessageQueue.cpp
 )
 
 target_link_libraries(Server
@@ -32,6 +34,8 @@ add_executable(Client
     WebsocketClient.h
     Message.h
     Message.cpp
+    MessageQueue.h
+    MessageQueue.cpp
 )
 
 target_link_libraries(Client
