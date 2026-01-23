@@ -14,8 +14,8 @@ include_directories(${Boost_INCLUDE_DIRS})
 # Build Server executable
 add_executable(Server
     Server.cpp
-    WebsocketServer.cpp
-    WebsocketServer.h
+    UDPServer.cpp
+    UDPServer.h
     Message.h
     Message.cpp
     MessageQueue.h
@@ -30,8 +30,8 @@ target_link_libraries(Server
 # Build Client executable
 add_executable(Client
     Client.cpp
-    WebsocketClient.cpp
-    WebsocketClient.h
+    UDPClient.cpp
+    UDPClient.h
     Message.h
     Message.cpp
     MessageQueue.h

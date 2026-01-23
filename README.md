@@ -20,7 +20,7 @@ mkdir build && cd build
 
 4. Make the tests using cmake
 ```bash
-cmake ..
+cmake ./
 ```
 
 5. Then make the tests using make
@@ -30,7 +30,8 @@ make
 
 6. Finally, run the program
 ```bash
-./bin/WebsocketTest
+./bin/Client
+./bin/Server
 ```
 
 7. Output should look something like this:

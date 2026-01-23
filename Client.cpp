@@ -1,13 +1,12 @@
-#include "WebsocketClient.h"
+#include "UDPClient.h"
 
 int main() {
-    WebSocketClient client("127.0.0.1", "8080"); // Localhost and port 8080
-    client.connect();
+    UDPClient client(0); // Localhost and port 8080
 
     while(true) {
         Message reply = client.receive();
         reply.printMessage(); // Print the received message
     }
     
-    client.close();
+    //client.close();
 }
