@@ -6,8 +6,9 @@ using udp = asio::ip::udp;
 //namespace websocket = beast::websocket;
 
 // Constructor
-UDPServer::UDPServer(unsigned short port) 
-    : serverSocket(ioc, udp::endpoint(udp::v4(), port)) {}
+UDPServer::UDPServer(unsigned short serverPort, unsigned short clientPort) 
+    : serverSocket(ioc, udp::endpoint(udp::v4(), serverPort)), 
+    clientEndpoint(udp::v4(), clientPort) {}
 
 
 // Run the WebSocket server, sending messages from the queue
@@ -27,10 +28,11 @@ void UDPServer::handle_session(MessageQueue& queue) {
         Message msg = queue.pop();
 
         // Serialize Message object to a string
-        std::string serializedMsg = msg.serialize();
+        //std::string serializedMsg = msg.serialize();
+        std::string serializedMsg = "Hello! I am a sample message.";
 
         // Send the serialized message to the client
-        serverSocket.async_send(asio::buffer(serializedMsg),
+        serverSocket.async_send_to(asio::buffer(serializedMsg), clientEndpoint,
         [&](std::error_code ec, size_t bytesSent) {
             if (ec) {
                 std::cerr << "Message not sent: " << ec.message() << "\n";

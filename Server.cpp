@@ -8,6 +8,7 @@ int main() {
     queue.push(Message(1, WheelMessage{120, 45, 10}));
     queue.push(Message(1, ArmMessage{100, 200, 300, 50, 60, 1, 90, 180}));
 
-    UDPServer server(8080);
+    UDPServer server(8080, 8008);
     server.run(queue);
+    std::cout << "Data sent \n";
 }

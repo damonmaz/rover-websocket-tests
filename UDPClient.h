@@ -19,7 +19,7 @@ public:
      * Example Usage:
      *   UDPClient client("127.0.0.1", "8080");
      */
-    UDPClient(unsigned short port);
+    UDPClient(unsigned short serverPort, unsigned short clientPort);
 
     /** Connects to the WebSocket server
      *
@@ -55,5 +55,5 @@ public:
 private:
     boost::asio::io_context ioc;   // Boost ASIO IO context
     boost::asio::ip::udp::socket clientSocket;   // UDP server socket
-    boost::asio::ip::udp::endpoint serverEndpoint;
+    boost::asio::ip::udp::endpoint serverEndpoint; // Endpoint includes port and IP address
 };

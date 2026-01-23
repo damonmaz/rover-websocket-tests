@@ -16,7 +16,7 @@ public:
      * @param
      *  port: unsigned short - The port number to listen for incoming connections
     */
-    UDPServer(unsigned short port);
+    UDPServer(unsigned short serverPort, unsigned short clientPort);
 
     /** Runs the WebSocket server
      *
