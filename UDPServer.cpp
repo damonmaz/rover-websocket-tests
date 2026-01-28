@@ -28,8 +28,7 @@ void UDPServer::handle_session(MessageQueue& queue) {
         Message msg = queue.pop();
 
         // Serialize Message object to a string
-        //std::string serializedMsg = msg.serialize();
-        std::string serializedMsg = "Hello! I am a sample message.";
+        std::string serializedMsg = msg.serialize();
 
         // Send the serialized message to the client
         serverSocket.async_send_to(asio::buffer(serializedMsg), clientEndpoint,
@@ -40,4 +39,5 @@ void UDPServer::handle_session(MessageQueue& queue) {
         }
         );
     }
+    std::cout << "handle_session on the server side is returning!";
 }
