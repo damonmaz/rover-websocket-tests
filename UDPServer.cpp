@@ -18,6 +18,9 @@ void UDPServer::run(MessageQueue& queue) {
     //clientEndpoint = *resolver.resolve(udp::v4(), "base_server", "rover_client").begin();
 
     std::thread(&UDPServer::handle_session, this, std::ref(queue)).detach();
+    
+    // Create some fake asio tasks - prevent the context from finishing
+    asio::io_context::work idleWork(ioc);
     ioc.run();
 }
 
@@ -29,15 +32,12 @@ void UDPServer::handle_session(MessageQueue& queue) {
 
         // Serialize Message object to a string
         std::string serializedMsg = msg.serialize();
+        asio::mutable_buffer msgBuffer = asio::buffer(serializedMsg);
+
+        //serverSocket.wait(serverSocket.wait_write); //Wait until write is allowed
 
         // Send the serialized message to the client
-        serverSocket.async_send_to(asio::buffer(serializedMsg), clientEndpoint,
-        [&](std::error_code ec, size_t bytesSent) {
-            if (ec) {
-                std::cerr << "Message not sent: " << ec.message() << "\n";
-            }
-        }
-        );
+        serverSocket.send_to(msgBuffer, clientEndpoint);
     }
-    std::cout << "handle_session on the server side is returning!";
+    //serverSocket.send_to(asio::buffer("Hello from Server."), clientEndpoint);
 }

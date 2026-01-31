@@ -22,8 +22,9 @@ Message UDPClient::receive() {
     std::string received;
     try {
         std::cout << "Receive started!\n";
-        clientSocket.receive_from(asio::buffer(received, CLIENT_BUFFER_SIZE), serverEndpoint);
-        std::cout << "Receive ended!\n";
+        asio::mutable_buffer receiveBuffer = asio::buffer(received, CLIENT_BUFFER_SIZE);
+        clientSocket.receive_from(receiveBuffer, serverEndpoint);
+        std::cout << "Receive ended! Size received: " << receiveBuffer.size() << "\n";
     } catch (boost::system::system_error) {
         std::cerr << "Receive error!\n";
     }
