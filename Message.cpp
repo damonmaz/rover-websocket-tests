@@ -1,8 +1,7 @@
 #include "Message.h"
 
 // Constructor
-Message::Message(int prty, MessagePayload payload) :
-    m_isHighPriority(prty), m_payload(std::move(payload))
+Message::Message(MessagePayload payload) : m_payload(std::move(payload))
 {
     // Set m_format based on the payload type
     std::visit([this](auto&& arg) {
@@ -20,11 +19,10 @@ Message::Message(int prty, MessagePayload payload) :
 }
 
 // Default Constructor
-Message::Message() : m_isHighPriority(0), m_payload(Generic{0}), m_format(static_cast<MessageFormat>(-1)) {}
+Message::Message() : m_payload(Generic{0}), m_format(static_cast<MessageFormat>(-1)) {}
 
 // Copy Constructor
-Message::Message(Message const& src) :
-    m_isHighPriority(src.m_isHighPriority), m_payload(src.m_payload), m_format(src.m_format) { }
+Message::Message(Message const& src) : m_payload(src.m_payload), m_format(src.m_format) { }
 
 // Destructor
 Message::~Message() { }
@@ -32,22 +30,17 @@ Message::~Message() { }
 // Assignment Operator
 Message& Message::operator=(const Message& src) {
     if (this != &src) {
-        m_isHighPriority = src.m_isHighPriority;
-        m_payload = src.m_payload;
         m_format = src.m_format;
+        m_payload = src.m_payload;
     }
     return *this;
 }
-
-// Check if the message is a priority
-bool Message::isHighPriority() const { return m_isHighPriority; }
 
 // Get the format of the message
 MessageFormat Message::getFormat() const { return m_format; }
 
 // Print Message details
 void Message::printMessage() const {
-    std::cout << "Priority: " << m_isHighPriority << ", Payload: ";
     std::visit(
         [this](auto&& payload) {
             using T = std::decay_t<decltype(payload)>;
@@ -81,7 +74,7 @@ void Message::printMessage() const {
 std::string Message::serialize() const {
     //
     std::ostringstream oss;
-    oss << m_isHighPriority << " " << static_cast<int>(m_format) << " "; // Serialize priority and format
+    oss << static_cast<int>(m_format) << " "; // Serialize priority and format
     
     // Serialize payload based on its type
     std::visit([&oss](auto&& payload) {
@@ -152,7 +145,6 @@ Message Message::deserialize(const std::string& data) {
     }
 
     Message msg;
-    msg.m_isHighPriority = isHighPriority;
     msg.m_format = format;
     msg.m_payload = payload;
     return msg;

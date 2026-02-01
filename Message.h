@@ -31,21 +31,11 @@ public:
      *   Message msg1(1, WheelMessage{10, 20, 30});
      *   Message msg2(0, ArmMessage{15, 25});
      */
-    Message(int prty, MessagePayload payload);
+    Message(MessagePayload payload);
     Message();
     Message(Message const& src);
-    ~Message();
     Message& operator=(const Message& src);
-
-    /** Returns if a message has priority
-     *
-     * @param
-     * none
-     *
-     * @return
-     * (bool) if the message has priority (True) or not (False)
-     */
-    bool isHighPriority() const;
+    ~Message();
 
     /** prints contents of Message
      *
@@ -77,9 +67,8 @@ public:
     static Message deserialize(const std::string& data);
 
 private:
-    bool m_isHighPriority;    // Priority of message
-    MessagePayload m_payload; // One of the struct messages
     MessageFormat m_format;
+    MessagePayload m_payload; // One of the struct messages
 };
 
 #endif

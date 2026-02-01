@@ -54,16 +54,6 @@ public:
      */
     Message front();
 
-    /** Returns the message in the front of the regular (non-priority) queue
-     *
-     * @param
-     * none
-     *
-     * @return
-     * (Message) the Message object in the front of the queue
-     */
-    Message frontRegular();
-
     /** Returns the message in the back of the queue
      *
      * @param
@@ -74,16 +64,6 @@ public:
      */
     Message back();
 
-    /** Returns the message in the front of the priority queue
-     *
-     * @param
-     * none
-     *
-     * @return
-     * (Message) the Message object in the back of the priority queue
-     */
-    Message backPriority();
-
     /** Returns how many elements are in the queue
      *
      * @param
@@ -93,26 +73,6 @@ public:
      * (size_t) the number of elements in the queue
      */
     size_t size();
-
-    /** Returns how many elements are in the priority queue
-     *
-     * @param
-     * none
-     *
-     * @return
-     * (size_t) the number of elements in the queue
-     */
-    size_t sizePriority();
-
-    /** Returns how many elements are in the regular queue
-     *
-     * @param
-     * none
-     *
-     * @return
-     * (size_t) the number of elements in the queue
-     */
-    size_t sizeRegular();
 
     /** Returns if the queue is empty (True) or not (False)
      *
@@ -125,8 +85,7 @@ public:
     bool empty();
 
 private:
-    std::queue<Message> m_priorityQueue; // The priority queue
-    std::queue<Message> m_regularQueue;  // The regular queue
+    std::queue<Message> m_queue;  // The regular queue
 
     std::mutex m_mutex; // Lock to prevent accesses by multiples threads
     std::condition_variable
