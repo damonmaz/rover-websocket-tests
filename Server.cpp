@@ -5,10 +5,10 @@ int main() {
 
     // Push messages into the queue
     queue.push(Message(0, Generic{76}));
-    queue.push(Message(0, Generic{77}));
-    queue.push(Message(0, Generic{78}));
-    //queue.push(Message(1, WheelMessage{120, 45, 10}));
-    //queue.push(Message(1, ArmMessage{100, 200, 300, 50, 60, 1, 90, 180}));
+    //queue.push(Message(0, Generic{77}));
+    //queue.push(Message(0, Generic{78}));
+    queue.push(Message(1, WheelMessage{120, 45, 10}));
+    queue.push(Message(1, ArmMessage{100, 200, 300, 50, 60, 1, 90, 180}));
 
     //TEMP
     std::cout << "Message size:";

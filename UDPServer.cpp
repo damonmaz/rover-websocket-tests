@@ -33,11 +33,13 @@ void UDPServer::handle_session(MessageQueue& queue) {
         // Serialize Message object to a string
         std::string serializedMsg = msg.serialize();
         asio::mutable_buffer msgBuffer = asio::buffer(serializedMsg);
+        std::cout << "Size prepared for sending: " << msgBuffer.size() << "\n";
 
         //serverSocket.wait(serverSocket.wait_write); //Wait until write is allowed
 
         // Send the serialized message to the client
-        serverSocket.send_to(msgBuffer, clientEndpoint);
+        size_t returned = serverSocket.send_to(msgBuffer, clientEndpoint);
+        std::cout << "Size actually sent: " << returned << "\n";
     }
     //serverSocket.send_to(asio::buffer("Hello from Server."), clientEndpoint);
 }
