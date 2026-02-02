@@ -31,7 +31,7 @@ void UDPServer::handle_session(MessageQueue& queue) {
         Message msg = queue.pop();
 
         // Serialize Message object to a string
-        std::string serializedMsg = msg.serialize();
+        std::vector<std::byte> serializedMsg = msg.serialize();
         asio::mutable_buffer msgBuffer = asio::buffer(serializedMsg);
         std::cout << "Size prepared for sending: " << msgBuffer.size() << "\n";
 

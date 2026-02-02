@@ -52,19 +52,19 @@ public:
     /** Serializes the Message object to a string
      *
      * @return
-     *  std::string - The serialized message
+     *  std::vector<std::byte> - The serialized message
      */
-    std::string serialize() const;
+    std::vector<std::byte> serialize() const;
 
     /** Deserializes a string to a Message object
      *
      * @param
-     *  data: const std::string& - The serialized message string
+     *  data: const std::vector<std::byte> - The serialized message string
      *
      * @return
      *  Message - The deserialized Message object
      */
-    static Message deserialize(const std::string& data);
+    static Message deserialize(const std::vector<std::byte> data);
 
 private:
     MessageFormat m_format;

@@ -12,7 +12,7 @@ int main() {
 
     //TEMP
     std::cout << "Message size:";
-    std::string serializedMsg = Message(Generic{76}).serialize();
+    std::vector<std::byte> serializedMsg = Message(Generic{76}).serialize();
     boost::asio::mutable_buffer msgBuffer = boost::asio::buffer(serializedMsg);
     std::cout << msgBuffer.size() << "\n";
 

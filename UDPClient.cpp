@@ -19,13 +19,13 @@ UDPClient::UDPClient(unsigned short serverPort, unsigned short clientPort)
 // Receive a serialized Message from the UDP server
 Message UDPClient::receive() {
 
-    std::string received(CLIENT_BUFFER_SIZE, '\0');
+    std::vector<std::byte> received = {};
     system::error_code ec;
     size_t receivedSize;
 
     try {
         std::cout << "Receive started!\n";
-        asio::mutable_buffer receiveBuffer = asio::buffer(&received, CLIENT_BUFFER_SIZE);
+        asio::mutable_buffer receiveBuffer = asio::buffer(received, CLIENT_BUFFER_SIZE);
         receivedSize = clientSocket.receive_from(receiveBuffer, serverEndpoint, 0, ec);
         std::cout << "Buffer size (asio::buffer_size()): " << asio::buffer_size(receiveBuffer) << "\n";
         std::cout << "Buffer size (receiveBuffer.size()): " << receiveBuffer.size() << "\n";
@@ -38,6 +38,8 @@ Message UDPClient::receive() {
 
     // Deserialize the Message object
     Message msg = Message::deserialize(received);
+
+    std::cout << "Message received" << std::endl;
 
     return msg;
 }

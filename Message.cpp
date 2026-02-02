@@ -1,5 +1,8 @@
 #include "Message.h"
 
+#include <array>
+#include <cstring>
+
 // Constructor
 Message::Message(MessagePayload payload) : m_payload(std::move(payload))
 {
@@ -71,75 +74,58 @@ void Message::printMessage() const {
 }
 
 // Serialize the Message object to a string
-std::string Message::serialize() const {
-    //
-    std::ostringstream oss;
-    oss << static_cast<int>(m_format) << " "; // Serialize priority and format
-    
-    // Serialize payload based on its type
-    std::visit([&oss](auto&& payload) {
-        using T = std::decay_t<decltype(payload)>;
-        
-        // Generic message
-        if constexpr (std::is_same_v<T, Generic>) { 
-            oss << payload.value;
-        } 
-        // Wheel message
-        else if constexpr (std::is_same_v<T, WheelMessage>) {
-            oss << payload.velocity << " " << payload.theta << " " << payload.angle_velocity;
-        } 
-        // Arm message
-        else if constexpr (std::is_same_v<T, ArmMessage>) {
-            oss << payload.armXPos << " " << payload.armYPos << " " << payload.armZPos << " "
-                << payload.clawXPos << " " << payload.clawYPos << " " << payload.clawOpen << " "
-                << payload.clawRotation << " " << payload.wristRotation;
-        } 
-        // Science tool message (Don't think we need this anymore)
-        else if constexpr (std::is_same_v<T, ScienceToolMessage>) {
-            oss << payload.moveUpDown << " " << payload.moveLeftRight << " "
-                << payload.xPos << " " << payload.yPos;
-        }
-    }, m_payload);
+std::vector<std::byte> Message::serialize() const {
+    return std::vector<std::byte>((std::byte*)this, (std::byte*)this + sizeof(this));
+}
 
-    return oss.str();
+template <typename Payload>
+Payload parseMessage(std::byte *begin, std::byte *end)
+{
+    int dataLen = end - begin;
+    if (end - begin != sizeof(Payload))
+    {
+        throw std::runtime_error("Serialized MessagePayload size does not match expected." + std::to_string(dataLen) + " " + std::to_string(sizeof(Payload)));
+    }
+
+    Payload payload;
+    std::copy((std::byte *)&payload, begin, end);
+    return payload;
 }
 
 // Deserialize a string to a Message object
-Message Message::deserialize(const std::string& data) {
-    std::istringstream iss(data);
-    bool isHighPriority;
-    int formatInt;
-    iss >> isHighPriority >> formatInt;
+Message Message::deserialize(const std::vector<std::byte> data) {
+    if (data.size() > sizeof(MessagePayload)) {
+        throw std::runtime_error(
+            "Payload too large cannot deserialize.");
+    }
 
+    std::array<std::byte, sizeof(MessagePayload)> buffer = {};
+    std::copy(data.begin(), data.end(), buffer.begin());
+
+    int formatInt;
+    if (buffer.size() < sizeof(formatInt)) {
+        throw std::runtime_error("Payload to small.");
+    }
+    memcpy(&formatInt, buffer.data(), sizeof(formatInt));
     MessageFormat format = static_cast<MessageFormat>(formatInt);
 
     // Deserialize payload based on format
     MessagePayload payload;
     switch (format) {
         case MESSAGE_FORMAT_WHEEL: {
-            WheelMessage wm;
-            iss >> wm.velocity >> wm.theta >> wm.angle_velocity;
-            payload = wm;
+            payload = parseMessage<WheelMessage>(buffer.begin() + sizeof(formatInt), buffer.end());
             break;
         }
         case MESSAGE_FORMAT_ARM: {
-            ArmMessage am;
-            iss >> am.armXPos >> am.armYPos >> am.armZPos
-                >> am.clawXPos >> am.clawYPos >> am.clawOpen
-                >> am.clawRotation >> am.wristRotation;
-            payload = am;
+            payload = parseMessage<ArmMessage>(buffer.begin() + sizeof(formatInt), buffer.end());
             break;
         }
         case MESSAGE_FORMAT_SCIENCE_TOOL: {
-            ScienceToolMessage stm;
-            iss >> stm.moveUpDown >> stm.moveLeftRight >> stm.xPos >> stm.yPos;
-            payload = stm;
+            payload = parseMessage<ScienceToolMessage>(buffer.begin() + sizeof(formatInt), buffer.end());
             break;
         }
         default: { // Generic or unknown
-            Generic g;
-            iss >> g.value;
-            payload = g;
+            payload = parseMessage<Generic>(buffer.begin() + sizeof(formatInt), buffer.end());
             break;
         }
     }
