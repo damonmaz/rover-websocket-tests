@@ -18,8 +18,8 @@ enum ExtentionType {
     EXTENTION_TYPE_NONE,
 };
 
-enum MessageFormat {
-    MESSAGE_FORMAT_GENERIC = -1,
+enum MessageFormat : int {
+    MESSAGE_FORMAT_GENERIC,
     MESSAGE_FORMAT_WHEEL,
     MESSAGE_FORMAT_ARM,
     MESSAGE_FORMAT_SCIENCE_TOOL,

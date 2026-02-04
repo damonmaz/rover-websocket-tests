@@ -37,7 +37,8 @@ Message UDPClient::receive() {
     std::cout << "Error information: " << ec.message() << "\n";
 
     // Deserialize the Message object
-    Message msg = Message::deserialize(received);
+    Message msg = Message();
+    // msg = Message::deserialize(received);
 
     std::cout << "Message received" << std::endl;
 
