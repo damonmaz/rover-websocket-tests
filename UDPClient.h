@@ -6,7 +6,7 @@
 #include "Message.h" 
 #include <iostream>
 
-#define CLIENT_BUFFER_SIZE 2048
+#define CLIENT_BUFFER_SIZE 2048 // overkill
 
 class UDPClient {
 public:
