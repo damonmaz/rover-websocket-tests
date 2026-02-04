@@ -98,28 +98,28 @@ std::vector<std::byte> Message::serialize() const {
 }
 
 template <typename Payload>
-Payload parseMessage(const std::vector<std::byte> data)
+Payload parseMessage(const std::vector<std::byte> data, size_t size)
 {
-    if (data.size() - 4 != sizeof(Payload))
+    if (size - 4 != sizeof(Payload))
     {
-        throw std::runtime_error("Serialized MessagePayload size does not match expected." + std::to_string(data.size()) + " " + std::to_string(sizeof(Payload)));
+        throw std::runtime_error("Serialized MessagePayload size does not match expected. Expected: " + std::to_string(data.size()) + " Received: " + std::to_string(sizeof(Payload)));
     }
 
     Payload payload;
-    std::memcpy(&payload, data.data() + 4, data.size() - 4);
+    std::memcpy(&payload, data.data() + 4, size - 4);
     return payload;
 }
 
 // Deserialize a string to a Message object
-Message Message::deserialize(const std::vector<std::byte> data) {
-    if (data.size() > sizeof(MessagePayload)) {
+Message Message::deserialize(const std::vector<std::byte> data, size_t size) {
+    /*if (data.size() > sizeof(MessagePayload)) {
         throw std::runtime_error(
             "Payload too large cannot deserialize.");
     }
 
     if (data.size() < sizeof(int)) {
         throw std::runtime_error("Size of payload too small.");
-    }
+    }*/
 
     MessageFormat format;
     std::memcpy(&format, data.data(), sizeof(format));
@@ -128,23 +128,23 @@ Message Message::deserialize(const std::vector<std::byte> data) {
     MessagePayload payload;
     switch (format) {
         case MESSAGE_FORMAT_WHEEL: {
-            payload = parseMessage<WheelMessage>(data);
+            payload = parseMessage<WheelMessage>(data, size);
             break;
         }
         case MESSAGE_FORMAT_ARM: {
-            payload = parseMessage<ArmMessage>(data);
+            payload = parseMessage<ArmMessage>(data, size);
             break;
         }
         case MESSAGE_FORMAT_SCIENCE_TOOL: {
-            payload = parseMessage<ScienceToolMessage>(data);
+            payload = parseMessage<ScienceToolMessage>(data, size);
             break;
         }
         case MESSAGE_FORMAT_GENERIC: { // Generic or unknown
-            payload = parseMessage<Generic>(data);
+            payload = parseMessage<Generic>(data, size);
             break;
         }
         default:
-            throw std::runtime_error("Unkown data type.");
+            throw std::runtime_error("Unknown data type.");
     }
 
     Message msg;

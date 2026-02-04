@@ -41,7 +41,7 @@ void UDPServer::handle_session(MessageQueue& queue) {
         size_t returned = serverSocket.send_to(msgBuffer, clientEndpoint);
         std::cout << "Size actually sent: " << returned << "\n";
 
-        Message out = Message::deserialize(serializedMsg);
+        Message out = Message::deserialize(serializedMsg, returned);
         std::cout << "Deserialized Message Type: " << out.getFormat() << std::endl;
     }
     //serverSocket.send_to(asio::buffer("Hello from Server."), clientEndpoint);

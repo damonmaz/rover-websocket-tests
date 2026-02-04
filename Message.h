@@ -64,7 +64,7 @@ public:
      * @return
      *  Message - The deserialized Message object
      */
-    static Message deserialize(const std::vector<std::byte> data);
+    static Message deserialize(const std::vector<std::byte> data, size_t size);
 
 private:
     MessageFormat m_format;
