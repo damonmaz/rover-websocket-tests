@@ -9,15 +9,15 @@
 #include <chrono>
 
 
-class UDPServer {
+class UDPSender {
 public:
-/** Constructor for UDPServer
+/** Constructor for UDPSender
      *
      * @param
      *  serverPort: unsigned short - The server port (e.g., 8080)
      *  clientPort: unsigned short - The client port (e.g., 8008)
      */
-    UDPServer(unsigned short serverPort, unsigned short clientPort);
+    UDPSender(unsigned short serverPort, unsigned short clientPort);
 
     /** Prepares the UDP server
      *

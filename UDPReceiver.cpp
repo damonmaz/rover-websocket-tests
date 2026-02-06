@@ -1,18 +1,18 @@
-#include "UDPClient.h"
+#include "UDPReceiver.h"
 
 
 using namespace boost;
 using udp = asio::ip::udp;
 
 // Constructor
-UDPClient::UDPClient(unsigned short serverPort, unsigned short clientPort) 
+UDPReceiver::UDPReceiver(unsigned short serverPort, unsigned short clientPort) 
     : clientSocket(ioc, udp::endpoint(udp::v4(), clientPort)),
     serverEndpoint(udp::v4(), serverPort) {
         ioc.run();
     }
 
 // Receive a single serialized Message
-Message UDPClient::receive() {
+Message UDPReceiver::receive() {
 
     std::vector<std::byte> received(CLIENT_BUFFER_SIZE);
     system::error_code ec;

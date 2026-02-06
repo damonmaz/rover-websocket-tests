@@ -8,19 +8,19 @@
 
 #define CLIENT_BUFFER_SIZE 100 // overkill
 
-class UDPClient {
+class UDPReceiver {
 public:
 
-/** Constructor for UDPClient
+/** Constructor for UDPReceiver
      *
      * @param
      *  serverPort: unsigned short - The server port (e.g., 8080)
      *  clientPort: unsigned short - The client port (e.g., 8008)
      *
      * Example Usage:
-     *   UDPClient client(8080, 8008);
+     *   UDPReceiver client(8080, 8008);
      */
-    UDPClient(unsigned short serverPort, unsigned short clientPort);
+    UDPReceiver(unsigned short serverPort, unsigned short clientPort);
 
     /** Receives a message from the server
      *

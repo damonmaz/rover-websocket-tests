@@ -1,4 +1,4 @@
-#include "UDPServer.h"
+#include "UDPSender.h"
 
 int main() {
     MessageQueue queue;
@@ -16,7 +16,7 @@ int main() {
     boost::asio::mutable_buffer msgBuffer = boost::asio::buffer(serializedMsg);
     std::cout << msgBuffer.size() << "\n";
 
-    UDPServer server(8080, 8008);
+    UDPSender server(8080, 8008);
     server.run(queue);
     std::cout << "Data sent \n";
 }

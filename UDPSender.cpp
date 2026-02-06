@@ -1,18 +1,18 @@
-#include "UDPServer.h"
+#include "UDPSender.h"
 
 
 using namespace boost;
 using udp = asio::ip::udp;
 
 // Constructor
-UDPServer::UDPServer(unsigned short serverPort, unsigned short clientPort) 
+UDPSender::UDPSender(unsigned short serverPort, unsigned short clientPort) 
     : serverSocket(ioc, udp::endpoint(udp::v4(), serverPort)), 
     clientEndpoint(udp::v4(), clientPort) {}
 
 
 // Prepare the UDP sender
-void UDPServer::run(MessageQueue& queue) {;
-    std::thread(&UDPServer::handle_session, this, std::ref(queue)).detach();
+void UDPSender::run(MessageQueue& queue) {;
+    std::thread(&UDPSender::handle_session, this, std::ref(queue)).detach();
     
     // Create some fake asio tasks - prevent the context from finishing
     asio::io_context::work idleWork(ioc);
@@ -20,7 +20,7 @@ void UDPServer::run(MessageQueue& queue) {;
 }
 
 // Continuously send messages from the queue over UDP
-void UDPServer::handle_session(MessageQueue& queue) {
+void UDPSender::handle_session(MessageQueue& queue) {
     while(true) {
         // Pop the next message from the queue (blocks if empty)
         Message msg = queue.pop();
