@@ -73,7 +73,7 @@ void Message::printMessage() const {
     std::cout << std::endl;
 }
 
-// Serialize the Message object to a string
+// Serialize the Message object to a byte vector
 std::vector<std::byte> Message::serialize() const {
     int payloadLength = sizeof(m_format);
     switch (m_format) {
@@ -97,6 +97,8 @@ std::vector<std::byte> Message::serialize() const {
     return std::vector<std::byte>((std::byte*)this, (std::byte*)this + payloadLength);
 }
 
+// Extracts information received from a byte vector to a Payload
+// Performs a size check on received data against a Payload
 template <typename Payload>
 Payload parseMessage(const std::vector<std::byte> data, size_t size)
 {
@@ -110,16 +112,9 @@ Payload parseMessage(const std::vector<std::byte> data, size_t size)
     return payload;
 }
 
-// Deserialize a string to a Message object
+// Deserialize the received byte array to a Message object
+// Does not perform size checks (done in parseMessage)
 Message Message::deserialize(const std::vector<std::byte> data, size_t size) {
-    /*if (data.size() > sizeof(MessagePayload)) {
-        throw std::runtime_error(
-            "Payload too large cannot deserialize.");
-    }
-
-    if (data.size() < sizeof(int)) {
-        throw std::runtime_error("Size of payload too small.");
-    }*/
 
     MessageFormat format;
     std::memcpy(&format, data.data(), sizeof(format));

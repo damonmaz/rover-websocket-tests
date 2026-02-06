@@ -14,24 +14,13 @@ public:
 /** Constructor for UDPClient
      *
      * @param
-     *  host: const std::string& - The server host address (e.g., "127.0.0.1")
-     *  port: const std::string& - The server port (e.g., "8080")
+     *  serverPort: unsigned short - The server port (e.g., 8080)
+     *  clientPort: unsigned short - The client port (e.g., 8008)
      *
      * Example Usage:
-     *   UDPClient client("127.0.0.1", "8080");
+     *   UDPClient client(8080, 8008);
      */
     UDPClient(unsigned short serverPort, unsigned short clientPort);
-
-    /** Connects to the WebSocket server
-     *
-     * @param
-     *  none
-     *
-     * @return
-     *  none
-     */
-    
-    //void send(const std::string& message);
 
     /** Receives a message from the server
      *
@@ -43,18 +32,8 @@ public:
      */
     Message receive();
 
-    /** Closes the WebSocket connection
-     *
-     * @param
-     *  none
-     *
-     * @return
-     *  none
-     */
-    //void close();
-
 private:
     boost::asio::io_context ioc;   // Boost ASIO IO context
-    boost::asio::ip::udp::socket clientSocket;   // UDP server socket
+    boost::asio::ip::udp::socket clientSocket;   // UDP client socket
     boost::asio::ip::udp::endpoint serverEndpoint; // Endpoint includes port and IP address
 };

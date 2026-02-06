@@ -11,17 +11,18 @@
 
 class UDPServer {
 public:
-/** Constructor for WebSocketServer
+/** Constructor for UDPServer
      *
      * @param
-     *  port: unsigned short - The port number to listen for incoming connections
-    */
+     *  serverPort: unsigned short - The server port (e.g., 8080)
+     *  clientPort: unsigned short - The client port (e.g., 8008)
+     */
     UDPServer(unsigned short serverPort, unsigned short clientPort);
 
-    /** Runs the WebSocket server
+    /** Prepares the UDP server
      *
      * @param
-     *  msg: const Message& - The message to send to the client(s)
+     *  queue: MessageQueue& - The queue of messages to send to client(s)
      *
      * @return
      *  none
@@ -30,11 +31,10 @@ public:
 
 private:
 
-    /** Handles a single WebSocket session with a connected client
+    /** Continuously sends messages from the queue over UDP
      *
      * @param
-     *  socket: boost::asio::ip::tcp::socket - The socket for the connected client
-     *  msg: const Message& - The message to send to the client
+     *  queue: MessageQueue& - The queue of messages to send to client(s)
      *
      * @return
      *  none

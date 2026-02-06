@@ -7,6 +7,4 @@ int main() {
         Message reply = client.receive();
         reply.printMessage(); // Print the received message
     }
-    
-    //client.close();
 }

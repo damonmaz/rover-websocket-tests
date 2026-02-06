@@ -11,25 +11,19 @@ UDPClient::UDPClient(unsigned short serverPort, unsigned short clientPort)
         ioc.run();
     }
 
-// Send a serialized Message to the UDP server
-//void UDPClient::send(MessageQueue& queue) {
-    //TODO
-//}
-
-// Receive a serialized Message from the UDP server
+// Receive a single serialized Message
 Message UDPClient::receive() {
 
     std::vector<std::byte> received(CLIENT_BUFFER_SIZE);
     system::error_code ec;
     size_t receivedSize;
-    std::size_t minBufferSize = CLIENT_BUFFER_SIZE;
 
     try {
         std::cout << "Receive started!\n";
         asio::mutable_buffer receiveBuffer = asio::buffer(received.data(), received.size());
         std::cout << "Buffer size before(asio::buffer_size()): " << asio::buffer_size(receiveBuffer) << "\n";
         std::cout << "Buffer size before(receiveBuffer.size()): " << receiveBuffer.size() << "\n";
-        receivedSize = clientSocket.receive_from(receiveBuffer, serverEndpoint, 0, ec);
+        receivedSize = clientSocket.receive_from(receiveBuffer, serverEndpoint, 0, ec); // Receive a message synchronously
         std::cout << "Buffer size (asio::buffer_size()): " << asio::buffer_size(receiveBuffer) << "\n";
         std::cout << "Buffer size (receiveBuffer.size()): " << receiveBuffer.size() << "\n";
         std::cout << "Receive ended! Size received: " << receivedSize << "\n";
@@ -40,7 +34,6 @@ Message UDPClient::receive() {
     std::cout << "Error information: " << ec.message() << "\n";
 
     // Deserialize the buffer into a Message object
-    //Message msg = Message();
     Message msg = Message::deserialize(received, receivedSize);
 
     std::cout << "Message received" << std::endl;

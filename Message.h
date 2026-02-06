@@ -59,7 +59,9 @@ public:
     /** Deserializes a string to a Message object
      *
      * @param
-     *  data: const std::vector<std::byte> - The serialized message string
+     *  data: const std::vector<std::byte> - The serialized message byte vector
+     *  size: size_t - The size of the message to deserialize - the message will be deserialized from the start
+     *  of the byte vector until this number of bytes has been deserialized
      *
      * @return
      *  Message - The deserialized Message object
