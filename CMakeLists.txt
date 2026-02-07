@@ -14,8 +14,8 @@ include_directories(${Boost_INCLUDE_DIRS})
 # Build Server executable
 add_executable(Server
     Server.cpp
-    UDPSender.cpp
-    UDPSender.h
+    UDPHandler.cpp
+    UDPHandler.h
     Message.h
     Message.cpp
     MessageQueue.h
@@ -30,8 +30,8 @@ target_link_libraries(Server
 # Build Client executable
 add_executable(Client
     Client.cpp
-    UDPReceiver.cpp
-    UDPReceiver.h
+    UDPHandler.cpp
+    UDPHandler.h
     Message.h
     Message.cpp
     MessageQueue.h
