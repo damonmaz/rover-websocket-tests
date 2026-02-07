@@ -50,7 +50,7 @@ public:
      * @return
      *  Message - The received message as a Message object
      */
-    void receive();
+    void receive(MessageQueue& queue);
 
 private:
     boost::asio::io_context ioc;   // Boost ASIO IO context
