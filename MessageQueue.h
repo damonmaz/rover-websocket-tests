@@ -4,6 +4,7 @@
 #define QUEUE_LIMIT 100 // The maximum size of the queue
 
 #include "Message.h"
+#include "RoverState/MotorState.h"
 #include <condition_variable>
 #include <iostream>
 #include <mutex>
@@ -28,7 +29,7 @@ public:
      * @return
      * none
      */
-    void push(const Message message);
+    void push(const MotorState message);
 
     /** Remove message into correct queue depending on priority
      *
@@ -38,7 +39,7 @@ public:
      * @return
      * (Message) the Message object in the front of the queue
      */
-    Message pop();
+    MotorState pop();
 
     //----------------//
     /** DATA RETRIEVAL */
@@ -52,7 +53,7 @@ public:
      * @return
      * (Message) the Message object in the front of the queue
      */
-    Message front();
+    MotorState front();
 
     /** Returns the message in the back of the queue
      *
@@ -62,7 +63,7 @@ public:
      * @return
      * (Message) the Message object in the back of the queue
      */
-    Message back();
+    MotorState back();
 
     /** Returns how many elements are in the queue
      *
@@ -85,7 +86,7 @@ public:
     bool empty();
 
 private:
-    std::queue<Message> m_queue;  // The regular queue
+    std::queue<MotorState> m_queue;  // The regular queue
 
     std::mutex m_mutex; // Lock to prevent accesses by multiples threads
     std::condition_variable

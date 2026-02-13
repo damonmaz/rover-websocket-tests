@@ -11,7 +11,7 @@ MessageQueue::~MessageQueue() { }
 /* 
  * Add message into correct queue depending on priority
  */
-void MessageQueue::push(const Message message) {
+void MessageQueue::push(const MotorState message) {
 
     // Check for Queue limit
     if (this->isQueueLimit()) {
@@ -33,8 +33,8 @@ void MessageQueue::push(const Message message) {
 /* 
  * Remove message from correct queue depending on priority
  */
-Message MessageQueue::pop() {
-    Message returnMessage;
+MotorState MessageQueue::pop() {
+    MotorState returnMessage;
 
     // Thread acquires lock
     std::unique_lock<std::mutex> lock(m_mutex);
@@ -59,7 +59,7 @@ Message MessageQueue::pop() {
 /* 
  * Returns the message in the front of the queue
  */
-Message MessageQueue::front() {
+MotorState MessageQueue::front() {
     // Thread acquires lock
     std::unique_lock<std::mutex> lock(m_mutex);
 
@@ -76,7 +76,7 @@ Message MessageQueue::front() {
 /* 
  * Returns the message in the back of the queue
  */
-Message MessageQueue::back() {
+MotorState MessageQueue::back() {
 
     // Thread acquires lock
     std::unique_lock<std::mutex> lock(m_mutex);

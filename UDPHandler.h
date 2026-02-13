@@ -4,6 +4,8 @@
 #include <iostream>
 #include "Message.h" 
 #include "MessageQueue.h"
+#include "RoverState/MotorState.h"
+#include "RoverState/StateManagers/MotorStateManager.h"
 
 
 #define RECEIVE_BUFFER_SIZE 100

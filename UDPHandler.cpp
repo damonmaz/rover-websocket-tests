@@ -33,17 +33,15 @@ void UDPHandler::receive(MessageQueue& queue) {
 
         if (bytesReceived != 0) {
             // Deserialize the buffer into a Message object
-            Message msg = Message::deserialize(received, bytesReceived);
+            MotorState msg = MotorStateManager::deserialize(received, bytesReceived);
             isReceiving = false;
-            msg.printMessage(); // Print message received
+            // Cast to a MotorStateManager
+            MotorStateManager manager = MotorStateManager(msg); 
+            // Print message received
+            manager.printState();
 
-            // TEMP: testing
-            if (msg.getFormat() != MESSAGE_FORMAT_GENERIC){
-                queue.push(Message(Generic{1}));
-            }
         } else {
             std::cout << "Received nothing \n";
-            queue.push(Message(Generic{0}));
         }
 
         }); 
@@ -58,17 +56,25 @@ void UDPHandler::handle_session(MessageQueue& queue) {
     while(true) {
         if (!queue.empty()){
             // Pop the next message from the queue (blocks if empty)
-            Message msg = queue.pop();
+            MotorState msg = queue.pop();
+
+            // Get a MotorStateManager
+            MotorStateManager manager = MotorStateManager(msg);
 
             // Serialize Message object to a byte vector
-            std::vector<std::byte> serializedMsg = msg.serialize();
+            std::vector<std::byte> serializedMsg = manager.serialize();
             asio::mutable_buffer msgBuffer = asio::buffer(serializedMsg);
 
             // Send the serialized message to the client
             size_t returned = mySocket.send_to(msgBuffer, theirEndpoint);
 
             // Print the sent message
-            Message out = Message::deserialize(serializedMsg, returned);
+            MotorState out = MotorStateManager::deserialize(serializedMsg, returned);
+
+            // Cast to a MotorStateManager
+            MotorStateManager outManager = MotorStateManager(out);
+            outManager.printState();
+            
         } else if (!isReceiving) {
             UDPHandler::receive(queue);
         }

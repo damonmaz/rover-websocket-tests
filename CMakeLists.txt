@@ -16,10 +16,25 @@ add_executable(Server
     Server.cpp
     UDPHandler.cpp
     UDPHandler.h
-    Message.h
-    Message.cpp
+    RoverState/StateManagers/ArmMotorStateManager.h
+    RoverState/StateManagers/ArmStateManager.h
+    RoverState/StateManagers/DriveMotorStateManager.h
+    RoverState/StateManagers/DriveStateManager.h
+    RoverState/StateManagers/MotorStateManager.h
+    RoverState/StateManagers/MotorStateManager.cpp
+    RoverState/StateManagers/RoverStateManager.h
+    RoverState/StateManagers/RoverStateManager.cpp
+    RoverState/StateManagers/StateManager.h
+    RoverState/ArmMotorState.h
+    RoverState/ArmMotorState.h
+    RoverState/ArmState.h
+    RoverState/DriveMotorState.h
+    RoverState/DriveState.h
+    RoverState/MotorState.h
+    RoverState/RoverState.h
     MessageQueue.h
     MessageQueue.cpp
+    pub_general.h
 )
 
 target_link_libraries(Server
@@ -32,10 +47,25 @@ add_executable(Client
     Client.cpp
     UDPHandler.cpp
     UDPHandler.h
-    Message.h
-    Message.cpp
+    RoverState/StateManagers/ArmMotorStateManager.h
+    RoverState/StateManagers/ArmStateManager.h
+    RoverState/StateManagers/DriveMotorStateManager.h
+    RoverState/StateManagers/DriveStateManager.h
+    RoverState/StateManagers/MotorStateManager.h
+    RoverState/StateManagers/MotorStateManager.cpp
+    RoverState/StateManagers/RoverStateManager.h
+    RoverState/StateManagers/RoverStateManager.cpp
+    RoverState/StateManagers/StateManager.h
+    RoverState/ArmMotorState.h
+    RoverState/ArmMotorState.h
+    RoverState/ArmState.h
+    RoverState/DriveMotorState.h
+    RoverState/DriveState.h
+    RoverState/MotorState.h
+    RoverState/RoverState.h
     MessageQueue.h
     MessageQueue.cpp
+    pub_general.h
 )
 
 target_link_libraries(Client
